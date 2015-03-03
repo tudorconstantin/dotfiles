@@ -6,6 +6,7 @@ elif [ `uname` = "Linux" ]; then
   alias ls='ls --color=auto --show-control-char'
 fi
 alias l='ls -l'
+alias ll="ls -lhA"
 alias la='ls -la'
 alias ee='exit'
 alias e='exit'
