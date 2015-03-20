@@ -11,3 +11,8 @@ export PATH=$HOME/bin:$PATH
 stty stop undef # stop terminal locking (then Ctrl+S would be free.)
 
 # vim: nowrap sw=2 sts=2 ts=2 noet ff=unix:
+
+# enable perlbrew if available
+if [ -f ~/perl5/perlbrew/etc/bashrc ]; then
+    source ~/perl5/perlbrew/etc/bashrc
+fi
