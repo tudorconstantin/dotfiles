@@ -1,6 +1,6 @@
 # Keys
 # \233 is "Meta-Ctrl-[", or "Meta-Esc".
-escape \233\233
+#escape \233\233
 
 # no zombie ... upper screen termination should propagate to this one.
 zombie
@@ -54,6 +54,8 @@ termcapinfo xterm* ti@:te@
 autonuke on
 
 # Dsiable scroll buffer, should be implemented in upper screens.
-defscrollback 0
+#defscrollback 0
+
+defscrollback 10004096
 
 cd ~/.screen
