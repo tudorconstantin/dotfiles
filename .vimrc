@@ -1,90 +1,112 @@
-" <Vundle see="https://github.com/gmarik/vundle/blob/master/README.md">
-set nocompatible
-filetype off
+"RESET EVERYTHING
+set all&
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+" An example for a vimrc file.
+"
+" Maintainer:   Bram Moolenaar <Bram@vim.org>
+" Last change:  2008 Jul 02
+"
+" To use it, copy it to
+"     for Unix and OS/2:  ~/.vimrc
+"         for Amiga:  s:.vimrc
+"  for MS-DOS and Win32:  $VIM\_vimrc
+"       for OpenVMS:  sys$login:.vimrc
 
-Bundle 'gmarik/vundle'
-" My Bundles here:
-Bundle 'quickrun'
-Bundle 'neocomplcache'
-Bundle 'surround.vim'
-Bundle 'indenthaskell.vim'
-Bundle 'eregex.vim'
-Bundle 'Markdown'
-Bundle 'unite.vim'
-" Bundle 'Align.vim'
-" Align.vim needs to convert CR-LF (DOS style) to LF ONLY (Unix style). Use ":set fileformat=unix" and overwrite it.
-" colorscheme bundles
-Bundle 'tomasr/molokai'
-Bundle 'Wombat'
-Bundle 'Zenburn'
-" </Vundle>
-" <neocomplcache see="https://github.com/Shougo/neocomplcache/blob/master/README">
-let g:neocomplcache_enable_at_startup = 1
-" </neocomplcache>
-
-" start original .vimrc statements
-filetype on
-filetype indent on
-filetype plugin on
-syntax on
-
-set nocompatible
-set autoindent
-set number
-set laststatus=2
-set statusline=%<%f:%m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
-set t_Co=256
-colorscheme molokai
-" set backupcopy=yes
-set fileencodings=utf-8,cp932,euc-jp,iso-2011-jp
-set fileformats=unix,dos,mac
-set ambiwidth=double
-set visualbell
-
-" Insert <Tab> or complete identifier
-" if the cursor is after a keyword character
-function MyTabOrComplete()
-  let col = col('.')-1
-  if !col || getline('.')[col-1] !~ '\k'
-    return "\<tab>"
-  else
-    return "\<C-N>"
-  endif
-endfunction
-inoremap <Tab> <C-R>=MyTabOrComplete()<CR>
-noremap  <C-N> :bnext<CR>
-noremap  <C-P> :bprevious<CR>
-noremap  <C-L> :ls<CR>
-" via) http://d.hatena.ne.jp/i_ogi/20070314/1173889416
-" via) http://www15.ocn.ne.jp/~tusr/vim/vim_text2.html#mozTocId650051
-
-" via) http://ujihisa.nowa.jp/entry/5ebd23f397
-nnoremap <Esc><Esc> :<C-u>set nohlsearch<Return>
-nnoremap / :<C-u>set hlsearch<Return>/
-nnoremap ? :<C-u>set hlsearch<Return>?
-nnoremap * :<C-u>set hlsearch<Return>*
-nnoremap # :<C-u>set hlsearch<Return>#
-imap {} {}<Left>
-imap [] []<Left>
-imap () ()<Left>
-imap '' ''<Left>
-imap "" ""<Left>
-imap \|\| \|\|<Left>
-
-let g:unite_enable_start_insert=1
-noremap <C-U><C-B> :UniteWithBufferDir buffer -buffer-name=buffer<CR>
-noremap <C-U><C-F> :Unite file -buffer-name=files<CR>
-noremap <C-U><C-R> :UniteWithCurrentDir file -buffer-name=files<CR>
-noremap <C-U><C-O> :Unite buffer file -buffer-name=files<CR>
-au FileType unite nnoremap <silent> <buffer> <ESC><ESC> :q<CR>
-au FileType unite inoremap <silent> <buffer> <ESC><ESC> <ESC>:q<CR>
-
-
-" quickrun options
-if exists('g:loaded_quickrun')
-  source ~/.vim/quickrunrc
+" When started as "evim", evim.vim will already have done these settings.
+if v:progname =~? "evim"
+  finish
 endif
 
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+
+" allow backspacing over everything in insert mode
+set backspace=indent,eol,start
+
+set nobackup        " do not keep a backup file, use versions instead
+set history=50      " keep 50 lines of command line history
+set ruler       " show the cursor position all the time
+set showcmd     " display incomplete commands
+set incsearch       " do incremental searching
+
+" For Win32 GUI: remove 't' flag from 'guioptions': no tearoff menu entries
+" let &guioptions = substitute(&guioptions, "t", "", "g")
+
+" Don't use Ex mode, use Q for formatting
+map Q gq
+
+" CTRL-U in insert mode deletes a lot.  Use CTRL-G u to first break undo,
+" so that you can undo CTRL-U after inserting a line break.
+inoremap <C-U> <C-G>u<C-U>
+
+" In many terminal emulators the mouse works just fine, thus enable it.
+"if has('mouse')
+"  set mouse=a
+"endif
+
+" Switch syntax highlighting on, when the terminal has colors
+" Also switch on highlighting the last used search pattern.
+if &t_Co > 2 || has("gui_running")
+  syntax on
+  set hlsearch
+  highlight DiffChange term=reverse cterm=bold ctermbg=Cyan ctermfg=DarkGrey
+  highlight DiffAdd term=reverse cterm=bold ctermbg=LightBlue ctermfg=Grey
+  highlight DiffDelete term=reverse cterm=bold ctermbg=DarkRed ctermfg=LightGrey
+  highlight DiffText term=reverse cterm=bold ctermbg=DarkMagenta ctermfg=LightGrey
+endif
+
+" Only do this part when compiled with support for autocommands.
+if has("autocmd")
+
+  " Enable file type detection.
+  " Use the default filetype settings, so that mail gets 'tw' set to 72,
+  " 'cindent' is on in C files, etc.
+  " Also load indent files, to automatically do language-dependent indenting.
+  filetype plugin indent on
+
+  " Put these in an autocmd group, so that we can delete them easily.
+  augroup vimrcEx
+  au!
+
+  " For all text files set 'textwidth' to 78 characters.
+  autocmd FileType text setlocal textwidth=0
+
+  " When editing a file, always jump to the last known cursor position.
+  " Don't do it when the position is invalid or when inside an event handler
+  " (happens when dropping a file on gvim).
+  " Also don't do it when the mark is in the first line, that is the default
+  " position when opening a file.
+  autocmd BufReadPost *
+    \ if line("'\"") > 1 && line("'\"") <= line("$") |
+    \   exe "normal! g`\"" |
+    \ endif
+
+  augroup END
+
+else
+
+  set autoindent        " always set autoindenting on
+
+endif " has("autocmd")
+
+" Make vim work with the 'crontab -e' command
+set backupskip+=/var/spool/cron/*
+
+" Convenient command to see the difference between the current buffer and the
+" file it was loaded from, thus the changes you made.
+" Only define it when not defined already.
+if !exists(":DiffOrig")
+  command DiffOrig vert new | set bt=nofile | r # | 0d_ | diffthis
+          \ | wincmd p | diffthis
+endif
+
+set nobackup
+set tabstop=4
+set softtabstop=4
+set shiftwidth=4
+set noexpandtab
+set nobomb
+set pastetoggle=<F10>
+set autoread
+nno :q :qa
