@@ -11,6 +11,12 @@ export LESS=-q
 # User specific aliases and functions
 complete -d cd # cd の補完ではディレクトリのみを対象にする
 
+
+# enable perlbrew if available
+if [ -f ~/perl5/perlbrew/etc/bashrc ]; then
+    source ~/perl5/perlbrew/etc/bashrc
+fi
+
 # Prompt setting
 SYSTEMPERL='/usr/bin/perl'
 
@@ -36,4 +42,6 @@ source ~/.bash.d/alias
 source ~/.bash.d/functions
 [ -e ~/.bash.d/perl ] && source ~/.bash.d/perl
 
+export ANDROID_HOME=~/Android/Sdk
+export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 # vim: nowrap sw=2 sts=2 ts=2 noet ff=unix:
