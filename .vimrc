@@ -109,4 +109,6 @@ set noexpandtab
 set nobomb
 set pastetoggle=<F10>
 set autoread
+set background=dark
+:color desert
 nno :q :qa
