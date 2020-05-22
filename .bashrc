@@ -17,6 +17,11 @@ if [ -f ~/perl5/perlbrew/etc/bashrc ]; then
     source ~/perl5/perlbrew/etc/bashrc
 fi
 
+# enable virtualenv
+#if [ -f ~/.venv-py3/bin/activate ]; then
+#    source ~/.venv-py3/bin/activate
+#fi
+
 # Prompt setting
 SYSTEMPERL='/usr/bin/perl'
 
@@ -44,4 +49,9 @@ source ~/.bash.d/functions
 
 export ANDROID_HOME=~/Android/Sdk
 export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
+
+# docker cleanup
+alias docker_clean_images='docker rmi $(docker images -a --filter=dangling=true -q)'
+alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
+
 # vim: nowrap sw=2 sts=2 ts=2 noet ff=unix:
