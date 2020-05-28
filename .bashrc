@@ -54,6 +54,7 @@ export PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/platform-tools
 alias docker_clean_images='docker rmi $(docker images -a --filter=dangling=true -q)'
 alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
 
+
 export GPG_TTY="$(tty)"
 export SSH_AUTH_SOCK="/run/user/$UID/gnupg/S.gpg-agent.ssh"
 gpg-connect-agent updatestartuptty /bye > /dev/null
